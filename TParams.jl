@@ -16,7 +16,7 @@ struct TParams
 end
 
 "Evaluates the Taylor expansion described by `params` for the state given by `initial_state`"
-function evaluate(params::TParams, initial_state::Vector{Float64})
+function evaluate(params::TParams, initial_state::AbstractVector{Float64})
     # matrix containg the powers of each parameter on each row
     pows = initial_state.^(1:params.n)'
     # vector that will contain the products of the terms corresponding to each coefficient

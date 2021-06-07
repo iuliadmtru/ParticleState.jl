@@ -1,17 +1,23 @@
 include("TParams.jl")
 include("TParams-DAT.jl")
-include("Mapping.jl")
+include("ParticleState.jl")
+include("ParticleStateMapper.jl")
 
-# `Mapping` type object constructed using data from the mapsy7.dat file
-mapping = MappingFromDAT("Bachelor-project\\mapsy7.dat")
+# `ParticleStateMapper` type object constructed using data from the mapsy7.dat file
+mapper = ParticleStateMapperFromDAT("Bachelor-project\\mapsy7.dat")
 
 # test serialization and deserialization functions
-MappingToJLD2(mapping, "Bachelor-project\\test.jld2")
-MappingFromJLD2("Bachelor-project\\test.jld2")
+ParticleStateMapperToJLD2(mapper, "Bachelor-project\\test.jld2")
+back = ParticleStateMapperFromJLD2("Bachelor-project\\test.jld2")
 
-# test `evaluate` function with the method from Mapping.jl -> vector describing the final state
-vars = [0.1, 10.0, 0.01, -0.01, 1, 1]
-map = evaluate(mapping, vars)
-for i in 1:length(vars)
-    println(fieldnames(Mapping)[i], ": ", vars[i], " -> ", map[i])
+# test `evaluate` function with the method from ParticleStateMapper.jl -> vector describing the final state
+vars = ParticleState(0.1, 10.0, 0.01, -0.01, 1, 1)
+out = evaluate(mapper, vars)
+for i in 1:6
+    println(fieldnames(ParticleStateMapper)[i], ": ", vars[i], " -> ", out[i])
+end
+
+out = evaluate(back, vars)
+for i in 1:6
+    println(fieldnames(ParticleStateMapper)[i], ": ", vars[i], " -> ", out[i])
 end
