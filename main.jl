@@ -1,25 +1,17 @@
 include("TParams.jl")
-include("Mapping.jl")
 include("TParams-DAT.jl")
+include("Mapping.jl")
 
-# stream that contains the information from the mapsy7.dat file
-io = open("Bachelor-project\\mapsy7.dat")
-
-# vector that will contain `TParams` objects constructed from each dataset in the given file
-current_tparam = TParamsFromDAT(io)
-tparams = TParams[]
-while current_tparam !== nothing
-    push!(tparams, current_tparam)
-    current_tparam = TParamsFromDAT(io)
-end
-
-close(io)
+# `Mapping` type object constructed using data from the mapsy7.dat file
+mapping = MappingFromDAT("Bachelor-project\\mapsy7.dat")
 
 # test serialization and deserialization functions
-TParamsToJLD2(tparams, "Bachelor-project\\test.jld2")
-TParamsFromJLD2("Bachelor-project\\test.jld2")
+MappingToJLD2(mapping, "Bachelor-project\\test.jld2")
+MappingFromJLD2("Bachelor-project\\test.jld2")
 
 # test `evaluate` function with the method from Mapping.jl -> vector describing the final state
-vars = [6.0, 5, 4, 3, 2, 1]
-mapping = Mapping(tparams...)
-@timev evaluate(mapping, vars)
+vars = [0.1, 10.0, 0.01, -0.01, 1, 1]
+map = evaluate(mapping, vars)
+for i in 1:length(vars)
+    println(fieldnames(Mapping)[i], ": ", vars[i], " -> ", map[i])
+end

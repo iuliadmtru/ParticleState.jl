@@ -26,16 +26,3 @@ function evaluate(params::TParams, initial_state::Vector{Float64})
     end
     prods' * params.coeffs
 end
-
-"""
-Serializes the data needed to map the initial state of a particle to the final state,
-contained in an object `tparams` of type Vector{TParams} into a file 'filename'
-"""
-function TParamsToJLD2(tparams::Vector{TParams}, filename::AbstractString)
-    save_object(filename, tparams)
-end
-
-"Deserializes `filename` to get the mapping data"
-function TParamsFromJLD2(filename::AbstractString)::Vector{TParams}
-    load_object(filename)
-end
