@@ -1,23 +1,23 @@
 using StaticArrays
 
 "Composite type that holds the parameters describing the mapping from one particle state to another"
-struct ParticleStateMapper <: FieldVector{6, TParams}
-    x::TParams
-    u::TParams
-    y::TParams
-    v::TParams
-    τ::TParams
-    dK_K0::TParams
+struct ParticleStateMapper <: FieldVector{6, TaylorParams}
+    x::TaylorParams
+    u::TaylorParams
+    y::TaylorParams
+    v::TaylorParams
+    τ::TaylorParams
+    dK_K0::TaylorParams
 end
 
-"Constructs a `ParticleStateMapper` type object from the data given by the function `TParamsFromDAT`"
+"Constructs a `ParticleStateMapper` type object from the data given by the function `TaylorParamsFromDAT`"
 function ParticleStateMapperFromDAT(filename::AbstractString)::ParticleStateMapper
-    io = open(filename)
-    mappers = TParams[]
+    stream = open(filename)
+    mappers = TaylorParams[]
     for _ in 1:6
-        push!(mappers, TParamsFromDAT(io))
+        push!(mappers, TaylorParamsFromDAT(stream))
     end
-    close(io)
+    close(stream)
     ParticleStateMapper(mappers...)
 end
 

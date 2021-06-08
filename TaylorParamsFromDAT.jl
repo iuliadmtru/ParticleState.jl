@@ -1,10 +1,10 @@
 using SparseArrays
 
 """
-Reads the values for the parameters needed in a TParams object from a file and
-returns an object of type TParams
+Reads the values for the parameters needed in a TaylorParams object from a file and
+returns an object of type TaylorParams
 """
-function TParamsFromDAT(stream::IOStream)::TParams
+function TaylorParamsFromDAT(stream::IOStream)::TaylorParams
     # read the stream up to the line where the needed data is written
     readuntil(stream, "I  COEFFICIENT            ORDER EXPONENTS\r\n", keep = true)
     # sparse matrix that will contain on each column the exponent orders corresponding to each coefficient
@@ -20,5 +20,5 @@ function TParamsFromDAT(stream::IOStream)::TParams
         push!(coeffs, parse(Float64, parts[2]))
         order_exponents = hcat(order_exponents, parse.(UInt8, parts[4:9]))
     end
-    TParams(order_exponents, coeffs)
+    TaylorParams(order_exponents, coeffs)
 end
